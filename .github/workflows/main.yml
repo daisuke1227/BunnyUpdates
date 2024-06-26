@@ -67,17 +67,6 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Download Bunny IPA artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        path: ./Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-
-    - name: Download BunnyWithUpdateNotifier IPA artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        path: ./BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Upload Bunny IPA to Release
       uses: actions/upload-release-asset@v1
