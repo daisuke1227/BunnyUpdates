@@ -19,7 +19,7 @@ jobs:
     - name: Set up environment
       run: |
         sudo apt update
-        sudo apt install -y unzip curl python3 python3-venv
+        sudo apt install -y unzip curl python3 python3-venv libxml2-utils libplist-utils
 
     - name: Install Pyzule
       run: bash -c "$(curl https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
