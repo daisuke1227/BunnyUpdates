@@ -2,12 +2,12 @@ name: Relase-Bunny
 on:
   workflow_dispatch:
     inputs:
-      ipa_link:
-        description: 'Enter the decrypted IPA link'
+      discord_link:
+        description: 'Enter the Discord App link'
         required: true
         type: string
-      ipa_version:
-        description: 'Enter the version of the IPA'
+      discord_version:
+        description: 'Enter the version of Discord'
         required: true
         type: string
 
@@ -33,16 +33,16 @@ jobs:
     - name: Download DaisukesPyoncordWithNotifier.pyzule
       run: curl -L -o DaisukesPyoncordWithNotifier.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncordWithNotifier.pyzule
 
-    - name: Download IPA
+    - name: Download Discord
       run: |
         mkdir ipa_contents
-        curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
+        curl -L -o decrypted.ipa "${{ github.event.inputs.discord_link }}"
 
     - name: Apply DaisukesPyoncord.pyzule
-      run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Apply DaisukesPyoncordWithNotifier.pyzule
-      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Create GitHub Release
       id: create_release
@@ -50,8 +50,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
-        tag_name: v${{ github.event.inputs.ipa_version }}
-        release_name: Release v${{ github.event.inputs.ipa_version }}
+        tag_name: v${{ github.event.inputs.discord_version }}
+        release_name: Release v${{ github.event.inputs.discord_version }}
         draft: false
         prerelease: false
 
@@ -61,8 +61,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./Bunny-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
-        asset_name: Bunny-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+        asset_path: ./Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_name: Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
 
     - name: Upload BunnyWithUpdateNotifier IPA to Release
@@ -71,6 +71,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BunnyWithUpdateNotifier-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
-        asset_name: BunnyWithUpdateNotifier-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+        asset_path: ./BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_name: BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
