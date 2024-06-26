@@ -19,10 +19,14 @@ jobs:
     - name: Set up environment
       run: |
         sudo apt update
-        sudo apt install -y unzip curl python3 python3-venv
+        sudo apt install -y unzip curl python3 python3-venv libxml2-utils
+
+    - name: Install plistutil
+      run: |
+        pip install plistutil
 
     - name: Install Pyzule
-      run: bash -c "$(curl -fsSL https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
+      run: bash -c "$(curl https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
 
     - name: Download DaisukesPyoncord.pyzule
       run: curl -L -o DaisukesPyoncord.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncord.pyzule
@@ -36,17 +40,8 @@ jobs:
         mkdir ipa_contents
         curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
         unzip decrypted.ipa -d ipa_contents
-        version=$(python3 -c "
-import plistlib
-import glob
-import os
-app_path = glob.glob('ipa_contents/Payload/*.app')[0]
-plist_path = os.path.join(app_path, 'Info.plist')
-with open(plist_path, 'rb') as f:
-    plist = plistlib.load(f)
-    print(plist['CFBundleShortVersionString'])
-")
-        echo "::set-output name=version::${version}"
+        ipa_version=$(plistutil -i ipa_contents/Payload/*.app/Info.plist -k CFBundleShortVersionString)
+        echo "::set-output name=version::${ipa_version}"
 
     - name: Apply DaisukesPyoncord.pyzule
       run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-checkversion-${{ steps.get_version.outputs.version }}-Daisuke.ipa
