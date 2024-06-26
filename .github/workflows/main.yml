@@ -19,7 +19,11 @@ jobs:
     - name: Set up environment
       run: |
         sudo apt update
-        sudo apt install -y unzip curl python3 python3-venv libxml2-utils libplist-utils
+        sudo apt install -y unzip curl python3 python3-venv libxml2-utils
+
+    - name: Install plistutil
+      run: |
+        pip install plistutil
 
     - name: Install Pyzule
       run: bash -c "$(curl https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
@@ -36,7 +40,7 @@ jobs:
         mkdir ipa_contents
         curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
         unzip decrypted.ipa -d ipa_contents
-        ipa_version=$(plutil -extract CFBundleShortVersionString xml1 -o - ipa_contents/Payload/*.app/Info.plist | xmllint --xpath "string(//plist/string)" -)
+        ipa_version=$(plistutil -i ipa_contents/Payload/*.app/Info.plist -k CFBundleShortVersionString)
         echo "::set-output name=version::${ipa_version}"
 
     - name: Apply DaisukesPyoncord.pyzule
