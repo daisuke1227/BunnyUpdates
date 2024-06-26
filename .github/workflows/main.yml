@@ -7,6 +7,10 @@ on:
         description: 'Enter the decrypted IPA link'
         required: true
         type: string
+      ipa_version:
+        description: 'Enter the version of the IPA'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -30,21 +34,17 @@ jobs:
     - name: Download DaisukesPyoncordWithNotifier.pyzule
       run: curl -L -o DaisukesPyoncordWithNotifier.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncordWithNotifier.pyzule
 
-    - name: Extract IPA version
-      id: get_version
+    - name: Download and unzip IPA
       run: |
         mkdir ipa_contents
         curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
         unzip decrypted.ipa -d ipa_contents
-        info_plist_path=$(find ipa_contents/Payload -name "Info.plist" | head -n 1)
-        ipa_version=$(xmllint --xpath 'string(//key[.="CFBundleShortVersionString"]/following-sibling::string[1]/text())' "$info_plist_path")
-        echo "::set-output name=version::$ipa_version"
 
     - name: Apply DaisukesPyoncord.pyzule
-      run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-checkversion-${{ steps.get_version.outputs.version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
 
     - name: Apply DaisukesPyoncordWithNotifier.pyzule
-      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier-checkversion.0-${{ steps.get_version.outputs.version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier.0-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
 
     - name: Create GitHub Release
       id: create_release
@@ -52,27 +52,27 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
-        tag_name: v${{ steps.get_version.outputs.version }}
-        release_name: Release v${{ steps.get_version.outputs.version }}
+        tag_name: v${{ github.event.inputs.ipa_version }}
+        release_name: Release v${{ github.event.inputs.ipa_version }}
         draft: false
         prerelease: false
 
-    - name: Upload Bunny-checkversion IPA to Release
+    - name: Upload Bunny IPA to Release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./Bunny-checkversion-${{ steps.get_version.outputs.version }}-Daisuke.ipa
-        asset_name: Bunny-checkversion-${{ steps.get_version.outputs.version }}-Daisuke.ipa
+        asset_path: ./Bunny-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+        asset_name: Bunny-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
 
-    - name: Upload BunnyWithUpdateNotifier-checkversion IPA to Release
+    - name: Upload BunnyWithUpdateNotifier IPA to Release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BunnyWithUpdateNotifier-checkversion.0-${{ steps.get_version.outputs.version }}-Daisuke.ipa
-        asset_name: BunnyWithUpdateNotifier-checkversion.0-${{ steps.get_version.outputs.version }}-Daisuke.ipa
+        asset_path: ./BunnyWithUpdateNotifier.0-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+        asset_name: BunnyWithUpdateNotifier.0-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
