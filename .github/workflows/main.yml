@@ -38,13 +38,12 @@ jobs:
       run: |
         mkdir ipa_contents
         curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
-        unzip decrypted.ipa -d ipa_contents
 
     - name: Apply DaisukesPyoncord.pyzule
       run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
 
     - name: Apply DaisukesPyoncordWithNotifier.pyzule
-      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier.0-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
 
     - name: Create GitHub Release
       id: create_release
