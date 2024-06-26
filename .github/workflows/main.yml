@@ -20,7 +20,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y unzip curl python3 python3-venv libxml2-utils
-        
+
     - name: Install Pyzule
       run: bash -c "$(curl https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
 
@@ -33,7 +33,7 @@ jobs:
     - name: Extract IPA version
       id: get_version
       run: |
-         mkdir ipa_contents
+        mkdir ipa_contents
         curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
         unzip decrypted.ipa -d ipa_contents
         python3 -c "
