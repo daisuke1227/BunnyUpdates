@@ -1,10 +1,12 @@
 name: Decrypt IPA and Apply Pyzule
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      ipa_link:
+        description: 'Enter the decrypted IPA link'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -13,10 +15,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Ask for decrypted IPA link
-      id: get_ipa_link
-      run: echo "::set-output name=ipa_link::$(read -p 'Enter decrypted IPA link: ' ipa_link && echo $ipa_link)"
 
     - name: Set up environment
       run: |
@@ -36,15 +34,16 @@ jobs:
       id: get_version
       run: |
         mkdir ipa_contents
-        unzip ${{ steps.get_ipa_link.outputs.ipa_link }} -d ipa_contents
+        curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
+        unzip decrypted.ipa -d ipa_contents
         ipa_version=$(plutil -extract CFBundleShortVersionString xml1 -o - ipa_contents/Payload/*.app/Info.plist | xmllint --xpath "string(//plist/string)" -)
         echo "::set-output name=version::${ipa_version}"
 
     - name: Apply DaisukesPyoncord.pyzule
-      run: pyzule -i ${{ steps.get_ipa_link.outputs.ipa_link }} -z DaisukesPyoncord.pyzule -o Bunny-checkversion-${{ steps.get_version.outputs.version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-checkversion-${{ steps.get_version.outputs.version }}-Daisuke.ipa
 
     - name: Apply DaisukesPyoncordWithNotifier.pyzule
-      run: pyzule -i ${{ steps.get_ipa_link.outputs.ipa_link }} -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier-checkversion.0-${{ steps.get_version.outputs.version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier-checkversion.0-${{ steps.get_version.outputs.version }}-Daisuke.ipa
 
     - name: Create GitHub Release
       id: create_release
