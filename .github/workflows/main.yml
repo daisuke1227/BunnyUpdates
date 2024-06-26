@@ -34,7 +34,7 @@ jobs:
     - name: Download DaisukesPyoncordWithNotifier.pyzule
       run: curl -L -o DaisukesPyoncordWithNotifier.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncordWithNotifier.pyzule
 
-    - name: Download and unzip IPA
+    - name: Download IPA
       run: |
         mkdir ipa_contents
         curl -L -o decrypted.ipa "${{ github.event.inputs.ipa_link }}"
@@ -72,6 +72,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BunnyWithUpdateNotifier.0-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
-        asset_name: BunnyWithUpdateNotifier.0-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+        asset_path: ./BunnyWithUpdateNotifier-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
+        asset_name: BunnyWithUpdateNotifier-${{ github.event.inputs.ipa_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
