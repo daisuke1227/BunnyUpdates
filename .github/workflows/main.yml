@@ -1,5 +1,4 @@
-name: Decrypt IPA and Apply Pyzule
-
+name: Relase-Bunny
 on:
   workflow_dispatch:
     inputs:
