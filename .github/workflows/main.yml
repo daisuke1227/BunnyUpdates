@@ -27,11 +27,11 @@ jobs:
     - name: Install Pyzule
       run: bash -c "$(curl https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
 
-    - name: Download DaisukesPyoncord.pyzule
-      run: curl -L -o DaisukesPyoncord.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncord.pyzule
-
-    - name: Download DaisukesPyoncordWithNotifier.pyzule
-      run: curl -L -o DaisukesPyoncordWithNotifier.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncordWithNotifier.pyzule
+    - name: Download DaisukesPyoncordWithOpenInApp.pyzule
+      run: curl -L -o DaisukesPyoncordWithOpenInApp.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncordWithOpenInApp.pyzule
+      
+    - name: Download DaisukesPyoncordNotifierOpenInApp.pyzule
+      run: curl -L -o DaisukesPyoncordNotiferOpenInApp.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncordNotiferOpenInApp.pyzule
 
     - name: Download Discord
       run: |
@@ -39,22 +39,22 @@ jobs:
         curl -L -o decrypted.ipa "${{ github.event.inputs.discord_link }}"
 
     - name: Apply DaisukesPyoncord.pyzule
-      run: pyzule -i decrypted.ipa -z DaisukesPyoncord.pyzule -o Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithOpenInApp.pyzule -o BunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Apply DaisukesPyoncordWithNotifier.pyzule
-      run: pyzule -i decrypted.ipa -z DaisukesPyoncordWithNotifier.pyzule -o BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+      run: pyzule -i decrypted.ipa -z DaisukesPyoncordNotiferOpenInApp.pyzule -o BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Upload Bunny IPA as artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        path: ./Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        name: BunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        path: ./BunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Upload BunnyWithUpdateNotifier IPA as artifact
       uses: actions/upload-artifact@v2
       with:
-        name: BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        path: ./BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        name: BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        path: ./BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Create GitHub Release
       id: create_release
@@ -74,8 +74,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        asset_name: Bunny-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_path: ./BunnyBunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_name: BunnyBunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
 
     - name: Upload BunnyWithUpdateNotifier IPA to Release
@@ -84,6 +84,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        asset_name: BunnyWithUpdateNotifier-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_path: ./BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_name: BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
