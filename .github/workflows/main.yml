@@ -75,7 +75,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./BunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        asset_name: BunnyBunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_name: BunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
 
     - name: Upload BunnyWithUpdateNotifier IPA to Release
