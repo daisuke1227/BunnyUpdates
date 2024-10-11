@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       discord_link:
-        description: 'Enter the Discord App link'
+        description: 'Enter the Discord app link'
         required: true
         type: string
       discord_version:
@@ -25,7 +25,7 @@ jobs:
         sudo apt install -y unzip curl libxml2-utils
 
     - name: Install Pyzule
-      run: bash -c "$(curl https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
+      run: bash -c "$(curl -fsSL https://raw.githubusercontent.com/asdfzxcvbn/pyzule/main/install-pyzule.sh)"
 
     - name: Download DaisukesPyoncordWithOpenInApp.pyzule
       run: curl -L -o DaisukesPyoncordWithOpenInApp.pyzule https://github.com/daisuke1227/BunnyUpdates/raw/main/DaisukesPyoncordWithOpenInApp.pyzule
@@ -45,13 +45,13 @@ jobs:
       run: pyzule -i decrypted.ipa -z DaisukesPyoncordNotiferOpenInApp.pyzule -o BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Upload Bunny IPA as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: BunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         path: ./BunnyWithOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Upload BunnyWithUpdateNotifier IPA as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         path: ./BunnyNotifierOpenInApp-${{ github.event.inputs.discord_version }}-Daisuke.ipa
@@ -66,7 +66,6 @@ jobs:
         release_name: Release v${{ github.event.inputs.discord_version }}
         draft: false
         prerelease: false
-
 
     - name: Upload Bunny IPA to Release
       uses: actions/upload-release-asset@v1
