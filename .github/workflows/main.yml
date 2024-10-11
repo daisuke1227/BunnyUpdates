@@ -44,8 +44,8 @@ jobs:
     - name: Upload IPA with OpenInSafari
       uses: actions/upload-artifact@v3
       with:
-        name: BunnyNewWithOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        path: ./BunnyNewWithOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        name: BunnyWithOpenInSafari-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        path: ./BunnyWithOpenInSafari-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Upload IPA with OpenInSafariAndNotifier
       uses: actions/upload-artifact@v3
@@ -80,6 +80,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BunnyNewWithNotiferAndOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        asset_name: BunnyNewWithNotiferAndOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_path: ./BunnyWithOpenInSafariAndNotifer-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_name: BunnyWithOpenInSafariAndNotifer-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
