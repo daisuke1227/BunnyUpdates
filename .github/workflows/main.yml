@@ -36,10 +36,10 @@ jobs:
         curl -L -o com.hammerandchisel.discord-${{ github.event.inputs.discord_version }}.ipa "${{ github.event.inputs.discord_link }}"
 
     - name: Apply BunnyNewWithOpenIn.cyan
-      run: cyan -i com.hammerandchisel.discord-${{ github.event.inputs.discord_version }}.ipa -z BunnyNewWithOpenIn.cyan -o RevengeWithOpenInSafari-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+      run: cyan -i com.hammerandchisel.discord-${{ github.event.inputs.discord_version }}.ipa -z BunnyNewWithOpenIn.cyan -o BunnyWithOpenInSafari-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Apply RevengeWithOpenInSafariAndNotifier.cyan
-      run: cyan -i com.hammerandchisel.discord-${{ github.event.inputs.discord_version }}.ipa -z BunnyNewWithNotiferAndOpenIn.cyan -o RevengeWithOpenInSafariAndNotifer-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+      run: cyan -i com.hammerandchisel.discord-${{ github.event.inputs.discord_version }}.ipa -z BunnyNewWithNotiferAndOpenIn.cyan -o BunnyWithOpenInSafariAndNotifer-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Upload IPA with OpenInSafari
       uses: actions/upload-artifact@v3
@@ -50,8 +50,8 @@ jobs:
     - name: Upload IPA with OpenInSafariAndNotifier
       uses: actions/upload-artifact@v3
       with:
-        name: BunnyNewWithNotiferAndOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        path: ./BunnyNewWithNotiferAndOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        name: BunnyWithOpenInSafariAndNotifer-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        path: ./BunnyWithOpenInSafariAndNotifer-${{ github.event.inputs.discord_version }}-Daisuke.ipa
 
     - name: Create GitHub Release
       id: create_release
@@ -70,8 +70,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./BunnyNewWithOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
-        asset_name: BunnyNewWithOpenIn.cyan-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_path: ./BunnyWithOpenInSafari-${{ github.event.inputs.discord_version }}-Daisuke.ipa
+        asset_name: BunnyWithOpenInSafari-${{ github.event.inputs.discord_version }}-Daisuke.ipa
         asset_content_type: application/octet-stream
 
     - name: Upload IPA to GitHub Release (OpenInSafariAndNotifier)
